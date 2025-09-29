@@ -1,19 +1,50 @@
 # Medic HUB → Doctor Lab (DL)
 
-This repository tracks the technical specification and supporting assets for the Medic HUB → Doctor Lab (DL) platform.
+This repository contains the evolving implementation of the Medic HUB → Doctor Lab (DL) platform together with the governing technical specification.
 
-## Project Overview
+## Getting Started
 
-The platform targets solo practitioners and multi-clinic organizations, delivering modules for EMR-light, scheduling, billing, communications, staff management, analytics, and file handling. Extended PRO features include treatment plan automation, inventory management, deduplication, omnichannel chat, advanced analytics, and branch support.
+The first runnable asset in the repository is an API prototype that captures the core MVP flows described in the specification (authentication, multi-tenant patient management, scheduling, services, billing, files, notifications, and tasking).
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm, npm, or yarn package manager
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Start the API
+
+```bash
+npm run dev:api
+```
+
+The API starts on `http://localhost:3000` and exposes REST endpoints matching the MVP scope (see [API coverage](#api-coverage)).
+
+## API Coverage
+
+The table below highlights the endpoints that are currently implemented based on the MVP contract.
+
+| Area | Endpoint(s) |
+| --- | --- |
+| Authentication | `POST /auth/register`, `POST /auth/login` |
+| Patients & Profiles | `POST /patients`, `GET /patients`, `GET /patients/:id`, `PATCH /patients/:id`, `POST /tenants/:id/patient-profiles`, `GET /tenants/:id/patient-profiles`, `GET /patient-profiles/:id` |
+| Scheduling & Visits | `POST /visits`, `GET /visits`, `PATCH /visits/:id/status` |
+| Services & Pricing | `POST /services`, `GET /services` |
+| Billing & Payments | `POST /invoices`, `GET /invoices/:id`, `POST /invoices/:id/pay` |
+| Files | `POST /files/upload`, `GET /files/:id`, `DELETE /files/:id` |
+| Notifications | `POST /notifications/templates`, `POST /notifications/send` |
+| Tasks | `GET /tasks`, `POST /tasks`, `PATCH /tasks/:id` |
+| Misc | `GET /health` |
+
+All routes (except registration/login/health) require a bearer token issued by the authentication endpoints. The API enforces tenant boundaries server-side to honor the multi-tenant model.
 
 ## Documentation
 
 - [Technical Specification v1.0](docs/technical-specification.md)
 
-## Next Steps
-
-1. Align on architecture and domain boundaries for the initial MVP scope.
-2. Establish repository structure for backend (NestJS microservices) and frontend (Next.js) applications.
-3. Prepare CI/CD pipelines, infrastructure definitions, and testing strategy according to the specification.
-
-Contributions should follow the requirements outlined in the technical specification and subsequent product decisions.
+Further iterations will incrementally cover the remaining MVP and PRO capabilities as outlined in the specification.
